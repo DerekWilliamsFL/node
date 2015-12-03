@@ -6,8 +6,8 @@ var http    = require('http');
 request('http://www.reddit.com/r/leagueoflegends', function(err, resp, body) {
 	if(!err && resp.statusCode == 200) {
 		var $ = cheerio.load(body);
-
-		for(i = 0; i < $('a.title').length; i++) {
+		var titleLength = $('a.title').length;
+		for(i = 0; i < titleLength; i++) {
 		//$('a.title').each(function(){
 			//var url = $('a.title');
 			//urls.push(url);
