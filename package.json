@@ -1,0 +1,12 @@
+{
+	"name": "rscraper",
+	"description": "Reddit scraper",
+	"version":  "1.0.0",
+	"author": "Derek Williams <github.com/derekwilliamsfl>",
+	"dependencies": {
+		"cheerio": "0.19.0",
+		"require": "3.3.6",
+		"http": "3.3.6",
+		"prompt": "0.2.14"
+	}
+}
