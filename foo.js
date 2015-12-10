@@ -21,7 +21,8 @@ prompt.start();
 			if(!err && resp.statusCode == 200) {
 				var $ = cheerio.load(body);
 				var titleLength = $('a.title').length;
-				for(i = 0; i < titleLength; i++) {
+
+				for(var i = 0; i < titleLength; i++) {
 					var title = $('a.title')['' + i + ''].children[0].data;
 					var link  = $('.first a[href]')['' + i + ''].attribs.href;
 					titles.push({
@@ -41,27 +42,31 @@ prompt.start();
 
 		prompt.get(['thread'], function (err, result) {
 			
-			var threadNo = result.thread
+			var threadNo = result.thread;
 			var url = titles[threadNo].link;
 			console.log(url)
 			console.log(threadNo)
 			request(url, function(err, resp, body) {
-			if(!err && resp.statusCode == 200) {
 				var $ = cheerio.load(body);
 				//Respond with the 10 highest parent-less comments
 				//console.log(url);
 
 				//OP's message
-				console.log($('.expando .md > p')['0'].children[0].data);
-
-				//Best Comments~
-			}
-				else {
-				console.log("Error");
+				var allParaElements = $('p');
+				var i;
+				var opDiv = $('.expando .md')['0'].children.length;
+				//var opParas = $('.expando .md')['0'].children[i].type;//.data;//.type;//[0].name;
+				for (i = 0; i < opDiv; i++) {
+					var opTypes = $('.expando .md')['0'].children[i].name;
+					var opText  = $('.expando .md')['0'].children[i].children[i][0].data;
+					if (opTypes == 'p') {
+					console.log(opText);
+					}
 				}
-			});
+		
 		});
 	});
+});
 
 /*http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
