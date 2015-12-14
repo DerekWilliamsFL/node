@@ -22,7 +22,7 @@ prompt.start();
 				var $ = cheerio.load(body);
 				var titleLength = $('a.title').length;
 
-				for(var i = 0; i < titleLength; i++) {
+				for(var i = 0; i < titleLength; ++i) {
 					var title = $('a.title')['' + i + ''].children[0].data;
 					var link  = $('.first a[href]')['' + i + ''].attribs.href;
 					titles.push({
@@ -32,8 +32,6 @@ prompt.start();
 					});
 				}
 				console.log(titles);
-				//Works!
-				//console.log(titles[2]);
 			}
 			else {
 				console.log("Error");
@@ -55,14 +53,26 @@ prompt.start();
 				var allParaElements = $('p');
 				var i;
 				var opDiv = $('.expando .md')['0'].children.length;
-				//var opParas = $('.expando .md')['0'].children[i].type;//.data;//.type;//[0].name;
-				for (i = 0; i < opDiv; i++) {
+				for (i = 0; i < opDiv; ++i) {
 					var opTypes = $('.expando .md')['0'].children[i].name;
-					var opText  = $('.expando .md')['0'].children[i].children[i][0].data;
+					var opText  = $('.expando .md')['0'].children[i];
 					if (opTypes == 'p') {
-					console.log(opText);
+						console.log(opText.children[0].data);
 					}
+					//console.log(comments)
 				}
+				console.log('\n')
+
+				//Maybe push usernames to an array to differentiate comments and paras? +=
+				for (i = 0; i < opDiv; ++i) {
+					var commentType = $('.commentarea .entry .usertext .md p')[i].name
+					var commentText = $('.commentarea .entry .usertext .md p')[i].children
+					if (commentType == 'p') {
+						console.log('' + i + '.' + commentText[0].data + '\n')
+					} 
+					//console.log(comments)
+				}
+
 		
 		});
 	});
