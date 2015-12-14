@@ -24,7 +24,7 @@ prompt.start();
 
 				for(var i = 0; i < titleLength; ++i) {
 					var title = $('a.title')['' + i + ''].children[0].data;
-					var link  = $('.first a[href]')['' + i + ''].attribs.href + "?sort=top";
+					var link  = $('.first a[href]')['' + i + ''].attribs.href;
 					titles.push({
 						'thread' : i,
 						'title': title,
@@ -66,6 +66,7 @@ prompt.start();
 					var commentType = $('.md p', '.commentarea')[n].name;
 					var commentText = $('.md p', '.commentarea')[n].children;
 					var upvotes = $('.entry .tagline .unvoted', '.commentarea')[n].children[0].data;
+					//console.log(commentText);
 					if (commentType == 'p') {
 						console.log(commentText[0].data + "  [" + upvotes + "]" + '\n');
 					} 
