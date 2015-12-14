@@ -24,7 +24,7 @@ prompt.start();
 
 				for(var i = 0; i < titleLength; ++i) {
 					var title = $('a.title')['' + i + ''].children[0].data;
-					var link  = $('.first a[href]')['' + i + ''].attribs.href;
+					var link  = $('.first a[href]')['' + i + ''].attribs.href + "?sort=top";
 					titles.push({
 						'thread' : i,
 						'title': title,
@@ -42,33 +42,32 @@ prompt.start();
 			
 			var threadNo = result.thread;
 			var url = titles[threadNo].link;
-			console.log(url)
-			console.log(threadNo)
+			console.log("Loading.. \n" )
 			request(url, function(err, resp, body) {
 				var $ = cheerio.load(body);
 				//Respond with the 10 highest parent-less comments
 				//console.log(url);
 
 				//OP's message
-				var allParaElements = $('p');
-				var i;
-				var opDiv = $('.expando .md')['0'].children.length;
-				for (i = 0; i < opDiv; ++i) {
-					var opTypes = $('.expando .md')['0'].children[i].name;
-					var opText  = $('.expando .md')['0'].children[i];
+				//var allParaElements = $('p');
+				var opDiv = $('.md', '.expando')['0'].children.length;
+				for (var i = 0; i < opDiv; ++i) {
+					var opTypes = $('.md', '.expando')['0'].children[i].name;
+					var opText  = $('.md', '.expando')['0'].children[i];
 					if (opTypes == 'p') {
 						console.log(opText.children[0].data);
 					}
-					//console.log(comments)
 				}
-				console.log('\n')
+				console.log('\n');
 
 				//Maybe push usernames to an array to differentiate comments and paras? +=
-				for (i = 0; i < opDiv; ++i) {
-					var commentType = $('.commentarea .entry .usertext .md p')[i].name
-					var commentText = $('.commentarea .entry .usertext .md p')[i].children
+				//Need to replace OPDiv with parent comments.length
+				for (var n = 0; n < opDiv; ++n) {
+					var commentType = $('.md p', '.commentarea')[n].name;
+					var commentText = $('.md p', '.commentarea')[n].children;
+					var upvotes = $('.entry .tagline .unvoted', '.commentarea')[n].children[0].data;
 					if (commentType == 'p') {
-						console.log('' + i + '.' + commentText[0].data + '\n')
+						console.log(commentText[0].data + "  [" + upvotes + "]" + '\n');
 					} 
 					//console.log(comments)
 				}
