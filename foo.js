@@ -8,7 +8,20 @@ var prompt  = require('prompt');
 program.option('-1', '--first');
 program.parse(process.argv);
 if (program.first) console.log('First thread');*/
+/*function getAnotherThread() {
+	console.log("Read another thread?");
+	console.log("y / n")
+	var response = process.argv[2];
+	if (response === "y") {
+		//getThread();
+		console.log("DWADA")
+	}
+	else if (response === "n") {
+		console.log("Cancelled")
+	}
+}
 
+getAnotherThread();*/
 
 //Future Promise
 prompt.start();
@@ -36,45 +49,45 @@ prompt.start();
 			else {
 				console.log("Error");
 			}
-		});
+		function getThread () {
+			prompt.get(['thread'], function (err, result) {
+				
+				var threadNo = result.thread;
+				var url = titles[threadNo].link;
+				console.log("Loading.. \n" )
+				request(url, function(err, resp, body) {
+					var $ = cheerio.load(body);
+					//Respond with the 10 highest parent-less comments
+					//console.log(url);
 
-		prompt.get(['thread'], function (err, result) {
-			
-			var threadNo = result.thread;
-			var url = titles[threadNo].link;
-			console.log("Loading.. \n" )
-			request(url, function(err, resp, body) {
-				var $ = cheerio.load(body);
-				//Respond with the 10 highest parent-less comments
-				//console.log(url);
-
-				//OP's message
-				//var allParaElements = $('p');
-				var opDiv = $('.md', '.expando')['0'].children.length;
-				for (var i = 0; i < opDiv; ++i) {
-					var opTypes = $('.md', '.expando')['0'].children[i].name;
-					var opText  = $('.md', '.expando')['0'].children[i];
-					if (opTypes == 'p') {
-						console.log(opText.children[0].data);
+					//OP's message
+					//var allParaElements = $('p');
+					var opDiv = $('.md', '.expando')['0'].children.length;
+					var commentLen = 10;
+					for (var i = 0; i < opDiv; ++i) {
+						var opTypes = $('.md', '.expando')['0'].children[i].name;
+						var opText  = $('.md', '.expando')['0'].children[i];
+						if (opTypes == 'p') {
+							console.log(opText.children[0].data);
+						}
 					}
-				}
-				console.log('\n');
+					console.log('\n');
 
-				//Maybe push usernames to an array to differentiate comments and paras? +=
-				//Need to replace OPDiv with parent comments.length
-				for (var n = 0; n < opDiv; ++n) {
-					var commentType = $('.md p', '.commentarea')[n].name;
-					var commentText = $('.md p', '.commentarea')[n].children;
-					var upvotes = $('.entry .tagline .unvoted', '.commentarea')[n].children[0].data;
-					//console.log(commentText);
-					if (commentType == 'p') {
-						console.log(commentText[0].data + "  [" + upvotes + "]" + '\n');
-					} 
-					//console.log(comments)
-				}
-
-		
-		});
+					//Maybe push usernames to an array to differentiate comments and paras? +=
+					//Need to replace OPDiv with parent comments.length
+					for (var n = 0; n < opDiv; ++n) {
+						var commentType = $('.md p', '.commentarea')[n].name;
+						var commentText = $('.md p', '.commentarea')[n].children;
+						var upvotes = $('.entry .tagline .unvoted', '.commentarea')[n].children[0].data;
+						if (commentType == 'p') {
+							console.log(commentText[0].data + "  [" + upvotes + "]" + '\n');
+						} 
+					}
+				});
+			});
+		};
+		getThread();
+		//getAnotherThread();
 	});
 });
 
