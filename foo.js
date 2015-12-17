@@ -37,11 +37,13 @@ prompt.start();
 
 				for(var i = 0; i < titleLength; ++i) {
 					var title = $('a.title')['' + i + ''].children[0].data;
-					var link  = $('.first a[href]')['' + i + ''].attribs.href;
+					var link  = $('.first a[href]')['' + i + ''].attribs.href + "?sort=top";
+					var score = $('.midcol .unvoted')[ '' + i + ''].children[0].data;
 					titles.push({
 						'thread' : i,
 						'title': title,
-						'link' : link
+						'link' : link,
+						'score' : score
 					});
 				}
 				console.log(titles);
@@ -75,12 +77,14 @@ prompt.start();
 
 					//Maybe push usernames to an array to differentiate comments and paras? +=
 					//Need to replace OPDiv with parent comments.length
-					for (var n = 0; n < opDiv; ++n) {
+					for (var n = 0; n < 10; ++n) {
 						var commentType = $('.md p', '.commentarea')[n].name;
 						var commentText = $('.md p', '.commentarea')[n].children;
 						var upvotes = $('.entry .tagline .unvoted', '.commentarea')[n].children[0].data;
+						var noncollapsed = $('.noncollapsed .md p', '.commentarea')[n].children[0].data;
 						if (commentType == 'p') {
-							console.log(commentText[0].data + "  [" + upvotes + "]" + '\n');
+							//console.log(commentText[0].data + "  [" + upvotes + "]" + '\n');
+							console.log(noncollapsed + " [ " + upvotes + " ]" + '\n'); 
 						} 
 					}
 				});
