@@ -37,16 +37,18 @@ prompt.start();
 
 				for(var i = 0; i < titleLength; ++i) {
 					var title = $('a.title')['' + i + ''].children[0].data;
-					var link  = $('.first a[href]')['' + i + ''].attribs.href + "?sort=top";
+					var link  = $('.first a[href]')['' + i + ''].attribs.href + '?sort=top';
 					var score = $('.midcol .unvoted')[ '' + i + ''].children[0].data;
+					var comments = $('.first a')['' + i + ''].children[0].data;
 					titles.push({
 						'thread' : i,
 						'title': title,
 						'link' : link,
 						'score' : score
 					});
+					console.log("-> " + i + " | " + score + " points:\n" + title + " | " + comments + "\n----------");
 				}
-				console.log(titles);
+				
 			}
 			else {
 				console.log("Error");
@@ -59,45 +61,46 @@ prompt.start();
 				console.log("Loading.. \n" )
 				request(url, function(err, resp, body) {
 					var $ = cheerio.load(body);
-					//Respond with the 10 highest parent-less comments
-					//console.log(url);
-
-					//OP's message
-					//var allParaElements = $('p');
-					var opDiv = $('.md', '.expando')['0'].children.length;
-					var commentLen = 10;
-					for (var i = 0; i < opDiv; ++i) {
+					
+					var opDiv = $('.md', '.expando')['0'];
+					for (var i = 0; i < opDiv ; ++i) {
 						var opTypes = $('.md', '.expando')['0'].children[i].name;
 						var opText  = $('.md', '.expando')['0'].children[i];
 						if (opTypes == 'p') {
 							console.log(opText.children[0].data);
 						}
 					}
-					console.log('\n');
+					if(opDiv == null){
+						var opLink = $('p.title a[href]')[0].attribs.href;
+						console.log("OP had no text\n");
+						console.log(opLink);
+					}
 
-					//Maybe push usernames to an array to differentiate comments and paras? +=
-					//Need to replace OPDiv with parent comments.length
+					var commentLen = 10;
+
 					for (var n = 0; n < 10; ++n) {
-						var commentType = $('.md p', '.commentarea')[n].name;
-						var commentText = $('.md p', '.commentarea')[n].children;
-						var upvotes = $('.entry .tagline .unvoted', '.commentarea')[n].children[0].data;
-						var noncollapsed = $('.noncollapsed .md p', '.commentarea')[n].children[0].data;
-						if (commentType == 'p') {
-							//console.log(commentText[0].data + "  [" + upvotes + "]" + '\n');
-							console.log(noncollapsed + " [ " + upvotes + " ]" + '\n'); 
-						} 
+
+						var commentType = $('.md').children('p')[n];
+						if(commentType.name != null) {
+							var commentText = $('.md p', '.commentarea')[n].children;
+							var upvotes = $('.entry .tagline .unvoted', '.commentarea')[n].children[0].data;
+							var noncollapsed = $('.md p', '.commentarea')[n].children[0].data;
+							
+							if (commentType.name == 'p') {
+								//console.log(commentText[0].data + "  [" + upvotes + "]" + '\n');
+								console.log(noncollapsed + " [ " + upvotes + " ]" + '\n'); 
+							} 
+						}
+						else if (commentType == null ) {
+								console.log("No comments yet.");
+						}
+						else if (commentType == undefined) {
+							console.log("No more comments");
+						}
 					}
 				});
 			});
 		};
 		getThread();
-		//getAnotherThread();
 	});
 });
-
-/*http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.write('[' + sub.subreddit + ']' + '\n' + '\n');
-  res.end(titles.toString().split(',').join("\n").toString());
-}).listen(3618, "127.0.0.1");
-console.log('Server running at http://127.0.0.1:3618/');*/
