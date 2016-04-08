@@ -4,24 +4,6 @@ var titles  = [];
 var sub = {};
 var http    = require('http');
 var prompt  = require('prompt');
-/*var program = require('commander');
-program.option('-1', '--first');
-program.parse(process.argv);
-if (program.first) console.log('First thread');*/
-/*function getAnotherThread() {
-	console.log("Read another thread?");
-	console.log("y / n")
-	var response = process.argv[2];
-	if (response === "y") {
-		//getThread();
-		console.log("DWADA")
-	}
-	else if (response === "n") {
-		console.log("Cancelled")
-	}
-}
-
-getAnotherThread();*/
 
 //Future Promise
 prompt.start();
@@ -54,15 +36,15 @@ prompt.start();
 				console.log("Error");
 			}
 		function getThread () {
+			//if($('#noresults')){console.log('No Threads in this sub'); return }
 			prompt.get(['thread'], function (err, result) {
-				
 				var threadNo = result.thread;
 				var url = titles[threadNo].link;
 				console.log("Loading.. \n" )
 				request(url, function(err, resp, body) {
 					var $ = cheerio.load(body);
 					
-					var opDiv = $('.md', '.expando')['0'];
+					var opDiv = $('.md', '.expando')['0'].children.length;
 					for (var i = 0; i < opDiv ; ++i) {
 						var opTypes = $('.md', '.expando')['0'].children[i].name;
 						var opText  = $('.md', '.expando')['0'].children[i];
@@ -70,6 +52,7 @@ prompt.start();
 							console.log(opText.children[0].data);
 						}
 					}
+					console.log("-------------------\n")
 					if(opDiv == null){
 						var opLink = $('p.title a[href]')[0].attribs.href;
 						console.log("OP had no text\n");
@@ -87,7 +70,6 @@ prompt.start();
 							var noncollapsed = $('.md p', '.commentarea')[n].children[0].data;
 							
 							if (commentType.name == 'p') {
-								//console.log(commentText[0].data + "  [" + upvotes + "]" + '\n');
 								console.log(noncollapsed + " [ " + upvotes + " ]" + '\n'); 
 							} 
 						}
